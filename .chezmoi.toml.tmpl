@@ -1,0 +1,8 @@
+# vim: ft=toml
+
+{{- $devChoices := list "basic" "node" "python" -}}
+{{- $devType := promptChoiceOnce . "Development Type" "What language are you using" $devChoices}}
+
+[data]
+  devType = {{- $devType | quote -}}
+
