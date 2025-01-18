@@ -235,7 +235,7 @@ $env.config = {
         use_ls_colors: true # use the LS_COLORS environment variable to colorize output
         clickable_links: true # enable or disable clickable links. Your terminal has to support links.
     }
-
+  color_config: $atelier_dune_light
     rm: {
         always_trash: false # always act as if -t was given. Can be overridden with -p
     }
@@ -970,7 +970,7 @@ $env.config = {
     ]
 }
 use ~/.cache/starship/init.nu
-$env.config = ( $env.config | merge {color_config: (atelier_dune_light)})
+# $env.config = ( $env.config | merge {color_config: (atelier_dune_light)})
 
 use 'C:\Users\6fire\AppData\Roaming\dystroy\broot\config\launcher\nushell\br' *
 
