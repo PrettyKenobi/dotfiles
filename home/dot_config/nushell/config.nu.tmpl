@@ -93,11 +93,12 @@ $env.config.table.trim = `{`
 $env.config.datetime_format.normal = "%y.%m.%d %I:%M:%S%p"
 $env.config.color_config = $atelier_dune_light
 
-`{``{` if eq .chezmoi.os "windows" `}``}`
+{{ if eq .chezmoi.os "windows" }}
 use ~/.cache/starship/init.nu
 use 'C:\Users\6fire\AppData\Roaming\dystroy\broot\config\launcher\nushell\br' *
 $env.VISUAL = "neovide"
-`{``{` else if eq .chezmoi.os "linux" `}``}`
+{{ else if eq .chezmoi.os "linux" }}
 use std/util "path add"
 path add "/home/linuxbrew/.linuxbrew/bin"
-`{``{` end `}``}`
+$env.SSH_AUTH_SOCK = $"($env.XDG_RUNTIME_DIR)/ssh-agent.socket"
+{{ end }}
