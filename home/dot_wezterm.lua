@@ -1,5 +1,5 @@
 local wezterm = require("wezterm")
-local config = {}
+local config = wezterm.config_builder()
 local launch_menu = {}
 local wsl_domains = wezterm.default_wsl_domains()
 
@@ -16,7 +16,10 @@ end
 
 config.color_scheme = "rose-pine-dawn"
 config.default_prog = { "C:/Program Files/nu/bin/nu.exe" }
-config.font = wezterm.font("OpenDyslexicM Nerd Font Mono")
+config.font = wezterm.font({
+	family = "FantasqueSansM Nerd Font Mono",
+})
+config.font_size = 16
 config.launch_menu = launch_menu
 
 for idx, dom in ipairs(wsl_domains) do
