@@ -84,6 +84,7 @@ let atelier_dune_light = `{`
     cursor: "#6e6b5e"
 `}`
 
+$env.EDITOR = "nvim"
 $env.config.edit_mode = "vi"
 $env.config.table.mode = "compact"
 $env.config.table.trim = `{`
@@ -92,6 +93,7 @@ $env.config.table.trim = `{`
 `}`
 $env.config.datetime_format.normal = "%y.%m.%d %I:%M:%S%p"
 $env.config.color_config = $atelier_dune_light
+$env.config.shell_integration.osc133 = false
 
 {{ if eq .chezmoi.os "windows" }}
 use ~/.cache/starship/init.nu
@@ -101,4 +103,14 @@ $env.VISUAL = "neovide"
 use std/util "path add"
 path add "/home/linuxbrew/.linuxbrew/bin"
 $env.SSH_AUTH_SOCK = $"($env.XDG_RUNTIME_DIR)/ssh-agent.socket"
+$env.config.hooks.env_change.PWD =
+{ ||
+	if (which direnv | is empty) {
+		return
+	}
+	
+	direnv export json | from json | default {} | load-env
+	$env.PATH = $env.PATH | split row (char env_sep)
+
+}
 {{ end }}
