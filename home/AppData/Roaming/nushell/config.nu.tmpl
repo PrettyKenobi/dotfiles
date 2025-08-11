@@ -1,12 +1,10 @@
-use std/dirs
-
 # Theme definition
 let atelier_dune_light = `{`
     separator: "#6e6b5e"
     leading_trailing_space_bg: `{` attr: "n" `}`
     header: `{` fg: "#60ac39" attr: "b" `}`
     empty: "#6684e1"
-    bool: `{`|| if $in `{` "#1fad83" `}` else `{` "light_gray" `}` `}`
+    bool: `{`| | if $in `{` "#1fad83" `}` else `{` "light_gray" `}` `}`
     int: "#6e6b5e"
     filesize: `{`|e|
         if $e == 0b `{`
@@ -16,7 +14,7 @@ let atelier_dune_light = `{`
         `}` else `{``{` fg: "#6684e1" `}``}`
     `}`
     duration: "#6e6b5e"
-    date: `{`|| (date now) - $in |
+    date: `{`| | (date now) - $in |
         if $in < 1hr `{`
             `{` fg: "#d73737" attr: "b" `}`
         `}` else if $in < 6hr `{`
@@ -93,10 +91,16 @@ $env.config.table.trim = `{`
 $env.config.datetime_format.normal = "%y.%m.%d %I:%M:%S%p"
 $env.config.color_config = $atelier_dune_light
 
+# Terminal integration
+$env.config.shell_integration.osc133 = false
+
 `{``{` if eq .chezmoi.os "windows" `}``}`
-use ~/.cache/starship/init.nu
+mkdir ($nu.data-dir | path join "vendor/autoload")
+starship init nu | save -f ($nu.data-dir | path join "vendor/autoload/starship.nu")
 use 'C:\Users\6fire\AppData\Roaming\dystroy\broot\config\launcher\nushell\br' *
 $env.VISUAL = "neovide"
+$env._ZO_ECHO = "1"
+source ~/.zoxide.nu
 `{``{` else if eq .chezmoi.os "linux" `}``}`
 use std/util "path add"
 path add "/home/linuxbrew/.linuxbrew/bin"
