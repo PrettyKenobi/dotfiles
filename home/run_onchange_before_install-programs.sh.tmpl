@@ -1,0 +1,28 @@
+{{- if ne .chezmoi.os "windows" -}}
+#!/bin/bash
+
+# Install homebrew if necesarry
+if test ! $(which brew); then
+  printf '\n\n\e[33mHomebrew not found. \e[0mInstalling Homebrew...'
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+else
+  printf '\n\n\e[0mHomebrew found. Continuing...'
+fi
+
+brew bundle --file=/dev/stdin <<EOF
+{{ range .programs.other.universal -}}
+brew {{ . | quote }}
+{{ end -}}
+
+{{- if eq .devChoices "node" -}}
+{{ range .programs.other.node -}}
+brew {{ . | quote }}
+{{ end -}}
+{{ else }}
+
+{{ range .programs.other.python -}}
+brew {{ . | quote }}
+
+{{ end -}}
+EOF
+{{ end -}}
