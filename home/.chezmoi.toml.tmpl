@@ -1,8 +1,8 @@
 # vim: ft=toml
 
-[data]
-  devType ="python"
+{{- $devChoices := list "basic" "node" "python" -}}
+{{- $devType := promptChoiceOnce . "Development Type" "What language are you using" $devChoices}}
 
-[git]
-  autoCommit = true
-  autoPush = true
+[data]
+  devType = {{- $devType | quote -}}
+
