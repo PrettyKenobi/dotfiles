@@ -20,10 +20,10 @@ brew zellij
 
 {{- if eq .devChoices "node" -}}
 brew 'node-build'
-{{ end -}}
 
 {{ else if eq .devChoices "python" -}}
 brew hatch
 {{ end -}}
 EOF
+
 {{ end -}}
