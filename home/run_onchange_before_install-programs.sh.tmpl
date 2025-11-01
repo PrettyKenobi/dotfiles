@@ -18,10 +18,10 @@ brew starship
 brew nushell
 brew zellij
 
-{{- if eq .devChoices "node" -}}
+{{- if eq .devChoice "node" -}}
 brew 'node-build'
 
-{{ else if eq .devChoices "python" -}}
+{{ else if eq .devChoice "python" -}}
 brew hatch
 {{ end -}}
 EOF
