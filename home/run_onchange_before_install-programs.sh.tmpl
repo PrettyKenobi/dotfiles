@@ -9,7 +9,6 @@ else
   printf '\n\nHomebrew found. Continuing...'
 fi
 
-brew bundle --file=/dev/stdin <<EOF
 brew install bat
 brew install bat-extras
 brew install eza
@@ -21,6 +20,5 @@ brew install zellij
 #brew 'node-build'
 
 #brew hatch
-EOF
 
 {{ end -}}
