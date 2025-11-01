@@ -2,11 +2,11 @@
 #!/bin/bash
 
 # Install homebrew if necesarry
-if test ! $(which brew); then
-  printf '\n\n\e[33mHomebrew not found. \e[0mInstalling Homebrew...'
+if test ! "$(which brew)"; then
+  printf '\n\nHomebrew not found. Installing Homebrew...'
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
 else
-  printf '\n\n\e[0mHomebrew found. Continuing...'
+  printf '\n\nHomebrew found. Continuing...'
 fi
 
 brew bundle --file=/dev/stdin <<EOF
@@ -18,11 +18,12 @@ brew {{ . | quote }}
 {{ range .programs.other.node -}}
 brew {{ . | quote }}
 {{ end -}}
-{{ else }}
+
+{{ else if eq .devChoices "python" -}}
 
 {{ range .programs.other.python -}}
 brew {{ . | quote }}
-
 {{ end -}}
 EOF
+{{ end -}}
 {{ end -}}
