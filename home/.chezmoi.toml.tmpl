@@ -4,5 +4,5 @@
 {{- $devType := promptChoiceOnce . "Development Type" "What language are you using" $devChoices}}
 
 [data]
-  devType = {{- $devType | quote -}}
+  devType = {{- $devType | quote }}
 
