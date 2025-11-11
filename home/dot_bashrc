@@ -1,3 +1,35 @@
-export PATH=/usr/local/bin:$PATH
+export PATH=~/bin:$PATH
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 eval "$(direnv hook bash)"
+
+# ========================================== #
+# Based on example .bashrc at tldp.org/LDP/abs/html/sample-bashrc.html
+
+# Don't do anything if not running interactively
+[ -z "$PS1" ] && return
+
+# Source global definitions
+if [ -f /etc/bashrc ]; then
+	. /etc/bashrc
+fi
+
+# Enable options
+shopt -s cdable_vars
+shopt -s checkhash
+shopt -s checkwinsize
+shopt -s sourcepath
+shopt -s no_empty_cmd_completion
+shopt -s cmdhist
+shopt -s histappend histreedit histverify
+shopt -s extglob # Necessary for programmable completion
+# ========================================== #
+
+if [ -f ~/.bash_alias ]; then
+	. ~/.bash_alias
+fi
+
+# TODO: Check if eza is installed before doing this
+export EZA_CONFIG_DIR='~/.config/eza'
+
+# TODO: Check that starship is installed
+eval "$(starship init bash)"

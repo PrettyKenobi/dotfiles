@@ -1,0 +1,20 @@
+"$schema" = 'https://starship.rs/config-schema.json'
+
+[prompt]
+format =
+
+[direnv]
+disabled = false
+
+[shell]
+disabled = false
+
+[status]
+disabled = false
+
+[sudo]
+disabled = false
+
+[time]
+disabled = false
+time_format = '%TT%z %Y-%m-%d'
