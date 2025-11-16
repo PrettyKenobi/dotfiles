@@ -1,0 +1,24 @@
+{{- if ne .chezmoi.os "windows" -}}
+#!/bin/bash
+
+# Install homebrew if necesarry
+if test ! "$(which brew)"; then
+  printf '\n\nHomebrew not found. Installing Homebrew...'
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+else
+  printf '\n\nHomebrew found. Continuing...'
+fi
+
+brew install bat
+brew install bat-extras
+brew install eza
+brew install fzf
+brew install starship
+brew install nushell
+brew install zellij
+
+#brew 'node-build'
+
+#brew hatch
+
+{{ end -}}
