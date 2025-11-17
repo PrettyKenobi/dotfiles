@@ -1,8 +1,5 @@
 "$schema" = 'https://starship.rs/config-schema.json'
 
-[prompt]
-format =
-
 [direnv]
 disabled = false
 
