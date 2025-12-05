@@ -37,8 +37,8 @@ $env.COLORTERM = 'truecolor'
 $env.HOME = 'C:/Users/6fire'
 
 # Register carapace completers
-mkdir '~\\.cache\\carapace'
-carapace _carapace nushell | save --force '~\\.cache\\carapace\\init.nu'
+mkdir $"($nu.cache-dir)"
+carapace _carapace nushell | save --force $"($nu.cache-dir)/carapace.nu"
 
 # Add Kroki CLI to PATH
 # let-env PATH = ($env.PaTH | split row (char esep) | prepend '~\\programming\\kroki')

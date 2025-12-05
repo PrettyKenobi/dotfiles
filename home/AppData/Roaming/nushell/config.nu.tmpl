@@ -20,6 +20,7 @@ $env._ZO_ECHO = "1"
 source ~/.zoxide.nu
 source ~/AppData/Roaming/nushell/scripts/from-others/themes/nu-themes/rose-pine-dawn.nu
 source 'C:\Users\6fire\AppData/Roaming/nushell/scripts/from-others/custom-completions/winget/winget-completions.nu'
+source $"($nu.cache-dir)/carapace.nu"
 {{ else if eq .chezmoi.os "linux" }}
 use std/util "path add"
 path add "/home/linuxbrew/.linuxbrew/bin"
