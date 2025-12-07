@@ -1,5 +1,5 @@
 # TODO: Check that ble.sh is installed first
-[[ $- == *i* ]] && source -- ~/.local/share/blesh/ble.sh --attach=none
+# [[ $- == *i* ]] && source -- ~/.local/share/blesh/ble.sh --attach=none
 
 export PATH=~/bin:$PATH
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
@@ -16,7 +16,7 @@ export BAT_THEME="rose-pine-dawn"
 
 # Source global definitions
 if [ -f /etc/bashrc ]; then
-	. /etc/bashrc
+  . /etc/bashrc
 fi
 
 # Enable options
@@ -24,15 +24,18 @@ shopt -s cdable_vars
 shopt -s checkhash
 shopt -s checkwinsize
 shopt -s sourcepath
-shopt -s no_empty_cmd_completion
+# shopt -s no_empty_cmd_completion
 shopt -s cmdhist
-shopt -s histappend histreedit histverify
+#shopt -s histappend histreedit histverify
 shopt -s extglob # Necessary for programmable completion
 # ========================================== #
 
 if [ -f ~/.bash_alias ]; then
-	. ~/.bash_alias
+  . ~/.bash_alias
 fi
+
+# TODO: Check that nvim is installed
+export EDITOR='nvim'
 
 # TODO: Check if eza is installed before doing this
 export EZA_CONFIG_DIR='~/.config/eza'
@@ -42,4 +45,7 @@ eval "$(starship init bash)"
 
 # TODO: check ble.sh is installed first
 # Folowing line must be at bottom of .bashrc
-[[ ! ${BLE_VERSION-} ]] || ble-attach
+#[[ ! ${BLE_VERSION-} ]] || ble-attach
+
+# TODO: Check that broot is installed first
+source $HOME/.config/broot/launcher/bash/br

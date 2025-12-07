@@ -1,9 +1,9 @@
 # Resource after editing
-alias realias='source ~/.bash_aliases'
+alias realias='source ~/.bash_alias'
 
 # Pretty print
 # TODO: Wrap in if to check that bat & bat-extras installedwith Homebrew
-alias bat="batcat"
+alias bat="bat"
 alias man='batman'
 
 # Use eza instead of ls
