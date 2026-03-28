@@ -1,5 +1,7 @@
+export CARAPACE_BRIDGES='zsh,fish,bash,inshellisense' # optional
+source <(carapace _carapace)
 # TODO: Check that ble.sh is installed first
-# [[ $- == *i* ]] && source -- ~/.local/share/blesh/ble.sh --attach=none
+[[ $- == *i* ]] && source -- ~/.local/share/blesh/ble.sh --attach=none
 
 export PATH=~/bin:$PATH
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
@@ -7,6 +9,9 @@ eval "$(direnv hook bash)"
 
 # TODO: Check that bat and Rose Pine Dawn theme available
 export BAT_THEME="rose-pine-dawn"
+
+# TODO: Check that bat-extras are installed
+eval "$(eval batman --export-env)"
 
 # ========================================== #
 # Based on example .bashrc at tldp.org/LDP/abs/html/sample-bashrc.html
@@ -43,9 +48,9 @@ export EZA_CONFIG_DIR='~/.config/eza'
 # TODO: Check that starship is installed
 eval "$(starship init bash)"
 
-# TODO: check ble.sh is installed first
-# Folowing line must be at bottom of .bashrc
-#[[ ! ${BLE_VERSION-} ]] || ble-attach
-
 # TODO: Check that broot is installed first
 source $HOME/.config/broot/launcher/bash/br
+
+# TODO: check ble.sh is installed first
+# Folowing line must be at bottom of .bashrc
+[[ ! ${BLE_VERSION-} ]] || ble-attach

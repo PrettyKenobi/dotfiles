@@ -113,4 +113,8 @@ $env.config.hooks.env_change.PWD =
 	$env.PATH = $env.PATH | split row (char env_sep)
 
 }
+
+# Carapace
+carapace _carapace nushell | save -f ($nu.data-dir | path join vendor/autoload/crapace.nu)
+source ($nu.data-dir | path join vendor/autoload/carapace.nu)
 {{ end }}
