@@ -15,7 +15,7 @@ if wezterm.target_triple == "x86_64-pc-windows-msvc" then
 end
 
 config.color_scheme = "rose-pine-dawn"
-config.default_prog = { "C:/Program Files/nu/bin/nu.exe" }
+config.default_prog = { "nu.exe" }
 config.font = wezterm.font({
 	family = "FantasqueSansM Nerd Font Mono",
 })
