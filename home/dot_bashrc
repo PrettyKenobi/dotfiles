@@ -17,7 +17,7 @@ eval "$(eval batman --export-env)"
 # Based on example .bashrc at tldp.org/LDP/abs/html/sample-bashrc.html
 
 # Don't do anything if not running interactively
-[ -z "$PS1" ] && return
+#[ -z "$PS1" ] && return
 
 # Source global definitions
 if [ -f /etc/bashrc ]; then
