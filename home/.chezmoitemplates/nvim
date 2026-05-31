@@ -383,18 +383,16 @@ do
   -- change the command under that to load whatever the name of that colorscheme is.
   --
   -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
-  vim.pack.add { gh 'folke/tokyonight.nvim' }
-  ---@diagnostic disable-next-line: missing-fields
-  require('tokyonight').setup {
-    styles = {
-      comments = { italic = false }, -- Disable italics in comments
+  vim.pack.add({
+    { src = gh "rose-pine/neovim",
+      name = "rose-pine",
     },
-  }
+  })
+  ---@diagnostic disable-next-line: missing-fields
+  require('rose-pine').setup {}
 
   -- Load the colorscheme here.
-  -- Like many other themes, this one has different styles, and you could load
-  -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-  vim.cmd.colorscheme 'tokyonight-night'
+  vim.cmd.colorscheme 'rose-pine-dawn'
 
   -- Highlight todo, notes, etc in comments
   vim.pack.add { gh 'folke/todo-comments.nvim' }
@@ -419,6 +417,8 @@ do
     n_lines = 500,
   }
 
+  require('mini.comment').setup {}
+  require('mini.sessions').setup {}
   -- Add/delete/replace surroundings (brackets, quotes, etc.)
   --
   -- - saiw) - [S]urround [A]dd [I]nner [W]ord [)]Paren
@@ -426,6 +426,7 @@ do
   -- - sr)'  - [S]urround [R]eplace [)] [']
   require('mini.surround').setup()
 
+  require('mini.starter').setup {}
   -- Simple and easy statusline.
   --  You could remove this setup call if you don't like it,
   --  and try some other statusline plugin
@@ -439,6 +440,7 @@ do
   ---@diagnostic disable-next-line: duplicate-set-field
   statusline.section_location = function() return '%2l:%-2v' end
 
+  require('mini.tabline').setup {}
   -- ... and there is more!
   --  Check out: https://github.com/nvim-mini/mini.nvim
 end
@@ -686,8 +688,18 @@ do
   --  See `:help lsp-config` for information about keys and how to configure
   ---@type table<string, vim.lsp.Config>
   local servers = {
+    bashls = {},
     -- clangd = {},
-    -- gopls = {},
+    glangci_lint_ls = {},
+    gopls = {},
+    harper_ls = {}, -- Spell checker
+    just = {},
+    -- LSP bridging for embedded languages
+    kakehashi = {
+      filetypes = { 'markdown' },
+    },
+    marksman = {},
+    nushell = {},
     -- pyright = {},
     -- rust_analyzer = {},
     --
@@ -898,7 +910,7 @@ do
   vim.pack.add { { src = gh 'nvim-treesitter/nvim-treesitter', version = 'main' } }
 
   -- Ensure basic parsers are installed
-  local parsers = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' }
+  local parsers = { 'bash', 'c', 'diff', 'go', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' }
   require('nvim-treesitter').install(parsers)
 
   ---@param buf integer
@@ -951,28 +963,85 @@ end
 -- kickstart.plugins.* examples
 -- ============================================================
 do
-  -- The following comments only work if you have downloaded the kickstart repo, not just copy pasted the
-  -- init.lua. If you want these files, they are in the repository, so you can just download them and
-  -- place them in the correct locations.
+  -- Autopairs
+  vim.pack.add { gh 'windwp/nvim-autopairs' }
+  require('nvim-autopairs').setup {}
 
-  -- NOTE: Next step on your Neovim journey: Add/Configure additional plugins for Kickstart
-  --
-  --  Here are some example plugins that I've included in the Kickstart repository.
-  --  Uncomment any of the lines below to enable them (you will need to restart nvim).
-  --
-  -- require 'kickstart.plugins.debug'
-  -- require 'kickstart.plugins.indent_line'
-  -- require 'kickstart.plugins.lint'
-  -- require 'kickstart.plugins.autopairs'
-  -- require 'kickstart.plugins.neo-tree'
-  -- require 'kickstart.plugins.gitsigns' -- adds gitsigns recommended keymaps
+  -- Debugging
+  local dap_plugins = {
+    gh 'mfussenegger/nvim-dap',
+    gh 'rcarriga/nvim-dap-ui',
+    gh 'nvim-neotest/nvim-nio',
+    gh 'mason-org/mason.nvim',
+    gh 'jay-babu/mason-nvim-dap.nvim',
+    gh 'leoluz/nvim-dap-go',
+    -- TODO: Look for plugins for other langauges
+  }
 
-  -- NOTE: You can add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
-  --
-  --  Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
-  -- require 'custom.plugins'
+  local dap = require('nvim-dap')
+  local dapui = require('nvim-dap-ui')
+
+  require('mason-nvim-dap').setup {
+    automatic_installation = true,
+    -- NOTE: See `mason-nvim-dap` README for providing additional config
+    -- to handlers
+    handlers = {},
+    -- NOTE: Make sure required things are installed
+    ensure_installed = {
+      'delve',
+    },
+  }
+
+  -- DAP UI setup
+  ---@diagnostic disable-line: missing-fields
+  dapui.setup {
+    icons = { expanded = '▾', collapsed = '▸', current_frame = '*' },
+    ---@diagnostic disable-next-line: missing-fields
+    controls = {
+      icons = {
+        pause = '⏸',
+        play = '▶',
+        step_into = '⏎',
+        step_over = '⏭',
+        step_out = '⏮',
+        step_back = 'b',
+        run_last = '▶▶',
+        terminate = '⏹',
+        disconnect = '⏏',
+      },
+    },
+  }
+
+  dap.listeners.after.event_initialized['dapui_config'] = dapui.open
+  dap.listeners.before.event_terminated['dapui_config'] = dapui.close
+  dap.listeners.before.event_exited['dapui_config'] = dapui.close
+
+  -- Golang specific config
+  require('dap-go').setup {
+    delve = {
+      detached = vim.fn.has 'win32' == 0,
+    },
+  }
+
+  -- Neo-tree plugin
+  local nt_plugins = {
+    { src = gh "nvim-neo-tree/neo-tree.nvim", version = vim.version.range '*' },
+    gh 'nvim-lua/plenary.nvim',
+    gh 'MunifTanjim/nui.nvim',
+  }
+
+  if vim.g.have_nerd_font then
+    table.insert(nt_plugins, gh 'nvim-tree/nvim-web-devicons')
+  end
+
+  vim.pack.add(nt_plugins)
+
+  vim.keymap.set('n', '<leader>t', '<Cmd>Neotree reveal<CR>', { desc = 'Neo[T]ree reveal', silent = true })
+
+  require ('neo-tree').setup {}
+
 end
 
 -- The line beneath this is called `modeline`. See `:help modeline`
--- vim: ts=2 sts=2 sw=2 et
+-- vim: ft=lua ts=2 sts=2 sw=2 et
 
