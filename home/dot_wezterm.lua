@@ -33,6 +33,8 @@ config.wsl_domains = wsl_domains
 config.use_fancy_tab_bar = false
 config.check_for_updates = true
 
+-- Themeing for tabline.
+-- Based on lualine.nvim
 local tabline = wezterm.plugin.require("https://github.com/michaelbrusegard/tabline.wez")
 tabline.setup({
 	options = {
@@ -40,6 +42,13 @@ tabline.setup({
 	},
 })
 tabline.apply_to_config(config)
--- local bar = wezterm.plugin.require("https://github.com/adriankarlen/bar.wezterm")
--- bar.apply_to_config(config)
+
+-- Define workspaces as separate lua files
+-- Files live in <wezterm.config_dir>/workspaces
+local wsinit = wezterm.plugin.require("https://github.com/JuanraCM/wsinit.wezterm")
+-- default keybind uses leader
+config.leader = { key = "/", mods = "CTRL", timeout_milliseconds = 1000 }
+wsinit.setup()
+wsinit.apply_to_config(config)
+
 return config
