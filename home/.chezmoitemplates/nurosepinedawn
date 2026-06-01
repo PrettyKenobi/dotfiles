@@ -1,3 +1,4 @@
+# chezmoi:template:left-delimiter="[[" right-delimiter="]]"
 # Retrieve the theme settings
 export def main [] {
     return {
