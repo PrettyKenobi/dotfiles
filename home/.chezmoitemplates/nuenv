@@ -1,3 +1,10 @@
 $env.CARAPACE_BRIDGES = 'zsh,fish,bash,inshellisense'
 mkdir $"($nu.cache-dir)"
 carapace _carapace nushell | save -f $"($nu.cache-dir)/carapace.nu"
+
+# Keep at end of file
+if ($"($nu.cache-dir)" | is empty ) {
+mkdir $"($nu.cache-dir)"
+}
+zoxide init nushell | save -f $"($nu.cache-dir)/zoxide.nu"
+# vim: ft=nu

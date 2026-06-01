@@ -40,5 +40,8 @@ $env.config.hooks.env_change.PWD ++= [{||
 
 # Starship prompt
 mkdir ($nu.data-dir | path join "vendor/autoload")
-starship init nu | save -f ($nu.data-dir | path join "vendor/autoload/starship.nu"
+starship init nu | save -f ($nu.data-dir | path join "vendor/autoload/starship.nu")
+
+# NOTE: Keep at end of file
+source ($nu.cache-dir | path join "zoxide.nu")
 # vim: ft=nu

@@ -968,7 +968,7 @@ do
   require('nvim-autopairs').setup {}
 
   -- Debugging
-  local dap_plugins = {
+  vim.pack.add {
     gh 'mfussenegger/nvim-dap',
     gh 'rcarriga/nvim-dap-ui',
     gh 'nvim-neotest/nvim-nio',
