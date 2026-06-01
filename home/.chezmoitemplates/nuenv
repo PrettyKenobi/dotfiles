@@ -1,0 +1,3 @@
+$env.CARAPACE_BRIDGES = 'zsh,fish,bash,inshellisense'
+mkdir $"($nu.cache-dir)"
+carapace _carapace nushell | save -f $"($nu.cache-dir)/carapace.nu"

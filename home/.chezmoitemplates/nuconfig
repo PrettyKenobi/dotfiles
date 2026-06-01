@@ -1,0 +1,44 @@
+source "rose-pine-dawn.nu"
+source $"($nu.cache-dir)/carapace.nu"
+
+$env.config.show_banner = false
+# auto_cd_implicit (bool): Gives precedence to auto-cd when command string is
+# an existing directory path.  
+# false: A relative (e.g.  './dirname') or absolute path is required to auto-cd.
+# true: If the command string matches a subdirectory in the current directory
+# (e.g. 'src'), auto-cd will be triggered without needing './' or '/'.
+$env.config.auto_cd_implicit = true
+
+$env.config.edit_mode = "vi"
+$env.config.EDITOR = "nvim"
+
+     {{- if eq .chezmoi.os "windows" }}
+     $env.config.VISUAL = "neovide"
+     {{- end }}
+
+     $env.config.cursor_shape.vi_normal = "block"
+     $env.config.cursor_shape.vi_insert = "line"
+
+     $env.config.completions.external.completer = {|spans|
+       carapace $spans.0 nushell ...$spans | from json 
+     }
+
+# $env.config.shell_integration.osc113 = false
+
+# Hooks
+$env.config.hooks.env_change.PWD = $env.config.hooks.env_change.PWD? | default []
+$env.config.hooks.env_change.PWD ++= [{||
+  if (which direnv | is-empty) {
+# if direnv isn't installed, do nothing
+    return 
+  }
+
+  direnv export json | from json | default {} | load-env
+# direnv returns PATH as a string so convert back to a list
+  $env.PATH = do (env-conviersions).path.from_string $env.PATH
+}]
+
+# Starship prompt
+mkdir ($nu.data-dir | path join "vendor/autoload")
+starship init nu | save -f ($nu.data-dir | path join "vendor/autoload/starship.nu"
+# vim: ft=nu
