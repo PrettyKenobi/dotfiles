@@ -118,6 +118,10 @@ do
   -- Don't show the mode, since it's already in the status line
   vim.o.showmode = false
 
+  -- <Tab> shenanigans
+  vim.o.expandtab = true
+  vim.o.tabstop = 2
+
   -- Sync clipboard between OS and Neovim.
   --  Schedule the setting after `UiEnter` because it can increase startup-time.
   --  Remove this option if you want your OS clipboard to remain independent.
@@ -826,6 +830,22 @@ do
   vim.pack.add { { src = gh 'L3MON4D3/LuaSnip', version = vim.version.range '2.*' } }
   require('luasnip').setup {}
 
+  local ls = require 'luasnip'
+  local types = require 'luasnip.util.types'
+
+  ls.config.set_config({
+    history = true,
+    updateevents = "TextChanged,TextChangedI",
+    enable_autosnippets = true,
+
+    ext_opts = {
+      [types.choiceNode] = {
+        active = {
+          virt_text = { { "<--", "Error" } },
+        },
+      },
+    },
+  })
   -- `friendly-snippets` contains a variety of premade snippets.
   --    See the README about individual language/framework/plugin snippets:
   --    https://github.com/rafamadriz/friendly-snippets
@@ -833,6 +853,22 @@ do
   -- vim.pack.add { gh 'rafamadriz/friendly-snippets' }
   -- require('luasnip.loaders.from_vscode').lazy_load()
 
+  -- LuaSnip Keymaps
+  vim.keymap.set({ "i", "s" }, "<C-k>", function ()
+   if ls.expand_or_jumpable() then ls.expand_or_jump()
+  end
+end, {silent = true})
+vim.keymap.set({ "i", "s" }, "<C-j>", function()
+  if ls.jumpable(-1) then ls.jump(-1) end 
+  end, {silent = true })
+
+  vim.keymap.set("i", "<C-l>", function()
+    if ls.choice_active() then ls.change_choice(1) end
+  end)
+
+-- Source luasnips file to reload snippets
+  -- Because I use chezmoi, that file is different from a typical setup
+vim.keymap.set("n", "<leader><leader>s", "<cmd>source ~/.loacal/share/chezmoi/home/.chezmoitemplates/luasnip")
   -- [[ Autocomplete Engine ]]
   vim.pack.add { { src = gh 'saghen/blink.cmp', version = vim.version.range '1.*' } }
   require('blink.cmp').setup {
@@ -978,7 +1014,7 @@ do
     -- TODO: Look for plugins for other langauges
   }
 
-  local dap = require('nvim-dap')
+  local dap = require('dap')
   local dapui = require('nvim-dap-ui')
 
   require('mason-nvim-dap').setup {
