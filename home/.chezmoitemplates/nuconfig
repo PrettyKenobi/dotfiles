@@ -7,13 +7,13 @@ $env.config.show_banner = false
 # false: A relative (e.g.  './dirname') or absolute path is required to auto-cd.
 # true: If the command string matches a subdirectory in the current directory
 # (e.g. 'src'), auto-cd will be triggered without needing './' or '/'.
-$env.config.auto_cd_implicit = true
+#$env.config.auto_cd_implicit = true
 
 $env.config.edit_mode = "vi"
-$env.config.EDITOR = "nvim"
+$env.EDITOR = "nvim"
 
 [[- if eq .chezmoi.os "windows" ]]
-     $env.config.VISUAL = "neovide"
+     $env.VISUAL = "neovide"
      [[- end ]]
 
      $env.config.cursor_shape.vi_normal = "block"
