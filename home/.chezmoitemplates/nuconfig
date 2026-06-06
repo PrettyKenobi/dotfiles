@@ -1,3 +1,5 @@
+use std/config *
+
 source "rose-pine-dawn.nu"
 source $"($nu.cache-dir)/carapace.nu"
 
@@ -35,7 +37,7 @@ $env.config.hooks.env_change.PWD ++= [{||
 
   direnv export json | from json | default {} | load-env
 # direnv returns PATH as a string so convert back to a list
-  $env.PATH = do (env-conviersions).path.from_string $env.PATH
+  $env.PATH = do (env-conversions).path.from_string $env.PATH
 }]
 
 # Starship prompt
