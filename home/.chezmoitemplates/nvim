@@ -703,7 +703,6 @@ do
       filetypes = { 'markdown' },
     },
     marksman = {},
-    nushell = {},
     -- pyright = {},
     -- rust_analyzer = {},
     --
@@ -833,6 +832,9 @@ do
   local ls = require 'luasnip'
   local types = require 'luasnip.util.types'
 
+  local snippet_path = vim.fn.stdpath("config") .. "/lua/luasnip"
+  require("luasnip.loaders.from_lua").lazy_load({ paths = { snippet_path } })
+
   ls.config.set_config({
     history = true,
     updateevents = "TextChanged,TextChangedI",
@@ -850,8 +852,8 @@ do
   --    See the README about individual language/framework/plugin snippets:
   --    https://github.com/rafamadriz/friendly-snippets
   --
-  -- vim.pack.add { gh 'rafamadriz/friendly-snippets' }
-  -- require('luasnip.loaders.from_vscode').lazy_load()
+  vim.pack.add { gh 'rafamadriz/friendly-snippets' }
+  require('luasnip.loaders.from_vscode').lazy_load()
 
   -- LuaSnip Keymaps
   vim.keymap.set({ "i", "s" }, "<C-k>", function ()
@@ -868,7 +870,7 @@ vim.keymap.set({ "i", "s" }, "<C-j>", function()
 
 -- Source luasnips file to reload snippets
   -- Because I use chezmoi, that file is different from a typical setup
-vim.keymap.set("n", "<leader><leader>s", "<cmd>source ~/.loacal/share/chezmoi/home/.chezmoitemplates/luasnip")
+-- vim.keymap.set("n", "<leader><leader>s", "<cmd>source ~/.loacal/share/chezmoi/home/.chezmoitemplates/luasnip")
   -- [[ Autocomplete Engine ]]
   vim.pack.add { { src = gh 'saghen/blink.cmp', version = vim.version.range '1.*' } }
   require('blink.cmp').setup {
@@ -899,7 +901,17 @@ vim.keymap.set("n", "<leader><leader>s", "<cmd>source ~/.loacal/share/chezmoi/ho
       -- For more advanced Luasnip keymaps (e.g. selecting choice nodes, expansion) see:
       --    https://github.com/L3MON4D3/LuaSnip?tab=readme-ov-file#keymaps
     },
-
+    snippets = {
+      preset = 'luasnip',
+      expand = function(snippet) require('luasnip').lsp_expand(snippet) end,
+      acitve = function(filter)
+        if filter and filter.direction then
+          return ls.locally_jumpable(filter.direction)
+        end
+      return ls.in_snippet()
+      end,
+      jump = function(direction) ls.jump(direction) end,
+    },
     appearance = {
       -- 'mono' (default) for 'Nerd Font Mono' or 'normal' for 'Nerd Font'
       -- Adjusts spacing to ensure icons are aligned
@@ -913,10 +925,9 @@ vim.keymap.set("n", "<leader><leader>s", "<cmd>source ~/.loacal/share/chezmoi/ho
     },
 
     sources = {
-      default = { 'lsp', 'path', 'snippets' },
+      default = { 'lsp', 'path', 'cmdline', 'snippets', 'buffer' },
     },
 
-    snippets = { preset = 'luasnip' },
 
     -- Blink.cmp includes an optional, recommended rust fuzzy matcher,
     -- which automatically downloads a prebuilt binary when enabled.
@@ -1015,7 +1026,7 @@ do
   }
 
   local dap = require('dap')
-  local dapui = require('nvim-dap-ui')
+  local dapui = require('dap-ui')
 
   require('mason-nvim-dap').setup {
     automatic_installation = true,
