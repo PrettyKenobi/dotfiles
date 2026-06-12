@@ -9,6 +9,7 @@ default:
     echo 'Hello, world!'
 
 # Create new base template in `./home/.chezmoitemplates`, then create template files in `./home/{{unix_location}}/{{target}}.{{ext}}.tmpl` and `./home/AppData/{{win_location}}.{{ext}}.tmpl`
+# TODO: Properly handle if `target` includes a parent directory
 [script("python3")]
 new-template target unix_location win_location ext:
     from pathlib import Path
