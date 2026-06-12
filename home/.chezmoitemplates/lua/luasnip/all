@@ -1,0 +1,11 @@
+return {
+        all = {
+                s({trig="mft", desc="Sets filetype with a Vim modeline comment."}, {
+                        i(1),
+                        t("vim: ft="),
+                        f(ft_func),
+                        }
+                )
+},
+}
+-- vim: ft=lua
