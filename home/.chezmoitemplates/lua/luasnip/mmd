@@ -1,0 +1,12 @@
+---@diagnostic disable: undefined-global, unused-local, unused-function, undefined-field
+return {
+        s({ trig='ct', name='chart title', dscr='Chart Title'},
+                fmta("[[[
+                ---
+                title: <>
+                ---
+                ]]]",
+                        { i(1, "title") }
+                    )),
+}
+-- vim: set ft=lua :
