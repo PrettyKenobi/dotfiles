@@ -16,7 +16,7 @@ $env.EDITOR = "nvim"
 
 [[- if eq .chezmoi.os "windows" ]]
      $env.VISUAL = "neovide"
-     [[- end ]]
+[[- end ]]
 
      $env.config.cursor_shape.vi_normal = "block"
      $env.config.cursor_shape.vi_insert = "line"
