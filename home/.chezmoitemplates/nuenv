@@ -1,3 +1,7 @@
+use std/util "path add"
+
+path add "~/.local/bin"
+
 $env.CARAPACE_BRIDGES = 'zsh,fish,bash,inshellisense'
 mkdir $"($nu.cache-dir)"
 carapace _carapace nushell | save -f $"($nu.cache-dir)/carapace.nu"

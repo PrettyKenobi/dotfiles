@@ -63,3 +63,10 @@ new-template target unix_location win_location ext:
             print("Windows template created")
 
     print("Dont forget to edit " + '{{target}}' + "!")
+
+[unix]
+[script("bash")]
+update-zellij-plugins:
+    zjstatus_url="https://api.github.com/repos/dj95/zjstatus/releases/latest"
+    wget --retry-on-http-error=3 $zjstatus_url
+    cat latest | jq -r '.assets[] | select(.name | contains("zjstatus.wasm")) | .browser_download_url' | xargs -I {} wget {}
