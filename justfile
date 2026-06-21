@@ -70,3 +70,7 @@ update-zellij-plugins:
     zjstatus_url="https://api.github.com/repos/dj95/zjstatus/releases/latest"
     wget --retry-on-http-error=3 $zjstatus_url
     cat latest | jq -r '.assets[] | select(.name | contains("zjstatus.wasm")) | .browser_download_url' | xargs -I {} wget {}
+
+    rm latest
+    mv zjstatus.wasm home/dot_data/zjstatus.wasm
+        cp home/dot_data/zjstatus.wasm home/AppData/Roaming/Zellij/zjsatus.wasm
