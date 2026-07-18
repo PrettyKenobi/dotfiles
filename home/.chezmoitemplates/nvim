@@ -1108,5 +1108,22 @@ do
               require('ufo').setup()
             end
 
+
+            -- ============================================================
+            -- SECTION 10: NEOVIDE
+            -- ============================================================
+
+            if vim.g.neovide then
+              vim.g.neovde_scroll_animation_length = 0.10
+
+              -- Progress bar
+              vim.g.neovide_progress_bar_enabled = true
+
+              vim.g.neovide_cursor_animation_length = 0.133
+              vim.g.neovide_cursor_short_animation_length = 0.05
+              vim.g.neovide_cursor_trail_size = 0.66
+
+              vim.g.neovide_cursor_vfx_mode = "torpedo"
+            end
             -- The line beneath this is called `modeline`. See `:help modeline`
             -- vim: ft=lua ts=2 sts=2 sw=2 et
