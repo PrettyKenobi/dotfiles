@@ -47,7 +47,11 @@ web_client {
 // Choose the theme that is specified in the themes section.
 // Default: default
 // 
+[[- if eq .chezmoi.os "windows" ]]
+theme_dir "~/AppData/Roaming/Zellij/themes"
+[[ else ]]
 theme_dir "~/.config/zellij/themes"
+[[ end ]]
 theme "rose-pine-dawn"
  
 // Choose the base input mode of zellij.
@@ -319,3 +323,5 @@ show_startup_tips false
 // typically work best. Set to 0 to use the number of (physical) CPU cores.
 // Note: This only applies to web clients at the moment.
 // client_async_worker_tasks 4
+
+// vim: set ft=kdl:

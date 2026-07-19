@@ -1,0 +1,66 @@
+local show_tabs_on_zjstatus = true
+local show_buffers_on_zjstatus = false
+
+-- zellij status line integration via https://github.com/dj95/zjstatus
+local function clear_zellij_status_tabs()
+        -- Clear statusline for tabs
+        vim.fm.system("zellij pipe 'zjstatus::pipe::pipe_neovim_tabs::'")
+end
+
+local function get_tab_buffers(tabnr)
+        -- Ingore buffers that have these patterns
+        local ingore_list = { "neo-tree", "help" }
+
+        local wins = vim.api.nvim_tabpage_list_wins(tabnr)
+        local bufs = {}
+        for _, win in ipairs(wins) do
+                local buf = vim.api.nvim_win_get_buf(win)
+                local buf_name = vim.api.nvim_buf_get_name(buf)
+                local ignore = false
+                for _, pattern in ipairs(ignore_list) do
+                        if string.find(buf_name:lower(), pattern, 1, true) then
+                                ignore = true
+                                break
+                        end
+                end
+                if not ignore then
+                        local file_name = buf_name:match("([^/\\]+)$") or buf_name
+                        table.insert(bufs, file_name)
+                end
+        end
+        return bufs
+end
+
+local function update_zellij_status_tabs()
+        local tabnr = vim.api.nvim_get_current_tabpage()
+        local tabpages = vim.api.nvim_list_tabpages()
+        local message = " | "
+        if #tabpages <= 1 then
+                clear_zellij_status_tabs()
+                return
+        end
+        for idx, tab in ipairs(tabpages) do
+                local bufs = get_tab_buffers(tab)
+                local tab_color = tab == tabnr and "color_overlay" or "color_base"
+                local buf_name = bufs[1] and bufs[1]:match("^%s*(.-)%s*$")
+                buf_name = buf_name and #buf_name > 20 and buf_name:sub(1, 17) .. "..."
+                message = message
+                .. "#[bg=$color_hl_high, fg=$"
+                .. tab_color
+                .. "]|#[bg=$"
+                .. tab_color
+                .. ",fg=$color_muted,bold]"
+                ... idx
+                .. " #[bg=$color_hl_low,fg=$"
+                .. tab_color
+                .. ",bold] "
+                .. (buf_name ~= "" and buf_name or ("Tab #" .. idx))
+                .. "#[bg=$color_base,fg=$color_text]| "
+        end
+        vim.fn.system("zellij pip `zjstatus::pipe::pipe_neovim_tabs::" .. message .. "'")
+end
+--
+local function has_current_zellij_session()
+        return os.getenv("ZELLIJ") ~= nil
+end
+-- vim: set ft=lua
