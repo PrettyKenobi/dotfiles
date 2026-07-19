@@ -227,8 +227,13 @@ do
         return
       end
 
-      if name == "telescope-fzf-native.nvim" and vim.fn.executable("make") == 1 then
-        run_build(name, { "make" }, ev.data.path)
+      if name == "telescope-fzf-native.nvim" then
+        if vim.fn.executable("make") == 1 then
+          run_build(name, { "make" }, ev.data.path)
+        elseif vim.fn.executable("cmake") == 1 then
+          run_build(name, { 'cmake', '-S.', '-Bbuild', '-DCMAKE_BUILD_TYPE=Release' }, ev.data.path)
+          run_build(name, { 'cmake', '--build', 'build', '--config', 'Release', '--target', 'install'}, ev.data.path)
+        end
         return
       end
 
@@ -243,6 +248,7 @@ do
         if not ev.data.active then
           vim.cmd.packadd("nvim-treesitter")
         end
+        if vim.fn.has("win32") ~= 1 then require("nvim-treesitter").install.compilers = { 'zig' } end
         vim.cmd("TSUpdate")
         return
       end
@@ -422,7 +428,7 @@ do
     gh("nvim-telescope/telescope-ui-select.nvim"),
     gh("benfowler/telescope-luasnip.nvim"),
   }
-  if vim.fn.executable("make") == 1 then
+  if vim.fn.executable("make") == 1 or vim.fn.executable("cmake") == 1 then
     table.insert(telescope_plugins, gh("nvim-telescope/telescope-fzf-native.nvim"))
   end
 
@@ -874,7 +880,7 @@ do
 
               -- Source luasnips file to reload snippets
               -- Because I use chezmoi, that file is different from a typical setup
-              -- vim.keymap.set("n", "<leader><leader>s", "<cmd>source ~/.loacal/share/chezmoi/home/.chezmoitemplates/luasnip")
+              -- vim.keymap.set("n", "<leader><leader>s", "<cmd>source ~/.local/share/chezmoi/home/.chezmoitemplates/luasnip")
               -- [[ Autocomplete Engine ]]
               vim.pack.add({ { src = gh("saghen/blink.cmp"), version = vim.version.range("1.*") } })
               require("blink.cmp").setup({
@@ -966,6 +972,12 @@ do
               -- Ensure basic parsers are installed
               local parsers =
               { "bash", "c", "diff", "go", "html", "lua", "luadoc", "markdown", "markdown_inline", "query", "vim", "vimdoc" }
+              -- NOTE: Needed to work on Windows. Zig MUST be installed.
+              --
+              if vim.fn.has("win32") ~= 1 then
+                require("nvim-treesitter").install.compilers = { 'zig' }
+              end
+
               require("nvim-treesitter").install(parsers)
 
               ---@param buf integer
@@ -1123,7 +1135,7 @@ do
               vim.g.neovide_cursor_short_animation_length = 0.05
               vim.g.neovide_cursor_trail_size = 0.66
 
-              vim.g.neovide_cursor_vfx_mode = "torpedo"
+              vim.g.neovide_cursor_vfx_mode = ""
             end
             -- The line beneath this is called `modeline`. See `:help modeline`
             -- vim: ft=lua ts=2 sts=2 sw=2 et
