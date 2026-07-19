@@ -1,3 +1,11 @@
+local ls = require("luasnip")
+-- local fmt = require("luasnip.extras.fmt").fmt
+-- local fmta = require("luasnip.extras.fmt").fmta
+local s = ls.snippet
+local t = ls.text_node
+local i = ls.insert_node
+-- local c = ls.choice_node
+
 return {
         all = {
                 s({trig="mft", desc="Sets filetype with a Vim modeline comment."}, {

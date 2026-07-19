@@ -1,4 +1,11 @@
---- @module 'luasnip'
+local ls = require("luasnip")
+local fmta = require("luasnip.extras.fmt").fmta
+
+local s = ls.snippet
+local t = ls.text_node
+local i = ls.insert_node
+local c = ls.choice_node
+
 local autosnippet = require'luasnip'.extend_decorator.apply(s, {snippetType = "autosnippet"})
 --[
 -- dynamic setup
@@ -10,11 +17,13 @@ return {
         --]
         -- format snippet
         s("snipf",
-                fmta([[ 
+                fmta(
+                        [[
                                                         <>({ trig='<>', name='<>', dscr='<>'},
                                                                 fmta(<>,
                                                                         { <> }
-                                                                    )<>)<>,]],
+                                                                    )<>)<>,
+                                                                    ]],
                         { c(1, { t("s"), t("autosnippet") }), i(2, "trig"), i(3, "trig"), i(4, "dscr"),
                                 i(5, "fmt"), i(6, "inputs"), i(7, "opts"), i(0) })
         ),
@@ -61,4 +70,4 @@ return {
         autosnippet("shide", { t("hidden = true") }),
 }
 
--- vim: set ft=lua :
+-- vim: set ft=lua tw=2
