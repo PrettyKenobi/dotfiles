@@ -16,7 +16,7 @@ $env.EDITOR = "nvim"
 
 [[- if eq .chezmoi.os "windows" ]]
      $env.VISUAL = "neovide"
-     [[- end ]]
+[[- end ]]
 
      $env.config.cursor_shape.vi_normal = "block"
      $env.config.cursor_shape.vi_insert = "line"
@@ -28,21 +28,29 @@ $env.EDITOR = "nvim"
 # $env.config.shell_integration.osc113 = false
 
 # Hooks
-$env.config.hooks.env_change.PWD = $env.config.hooks.env_change.PWD? | default []
-$env.config.hooks.env_change.PWD ++= [{||
-  if (which direnv | is-empty) {
-# if direnv isn't installed, do nothing
-    return 
-  }
+# $env.config.hooks.env_change.PWD = $env.config.hooks.env_change.PWD? | default []
+# $env.config.hooks.env_change.PWD ++= [{||
+#   if (which direnv | is-empty) {
+# # if direnv isn't installed, do nothing
+#     return 
+#   }
+#
+#   direnv export json | from json | default {} | load-env
+# # direnv returns PATH as a string so convert back to a list
+#   $env.PATH = do (env-conversions).path.from_string $env.PATH
+# }]
 
-  direnv export json | from json | default {} | load-env
-# direnv returns PATH as a string so convert back to a list
-  $env.PATH = do (env-conversions).path.from_string $env.PATH
-}]
 
 # Starship prompt
 mkdir ($nu.data-dir | path join "vendor/autoload")
 starship init nu | save -f ($nu.data-dir | path join "vendor/autoload/starship.nu")
+
+if (which ^mise | is-empty ) {
+#do nothing
+  return
+} else {
+^mise activate nu | save -f ($nu.data-dir | path join "vendor/autoload/mise.nu")
+}
 
 # NOTE: Keep at end of file
 source ($nu.cache-dir | path join "zoxide.nu")

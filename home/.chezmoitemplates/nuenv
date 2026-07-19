@@ -6,6 +6,11 @@ $env.CARAPACE_BRIDGES = 'zsh,fish,bash,inshellisense'
 mkdir $"($nu.cache-dir)"
 carapace _carapace nushell | save -f $"($nu.cache-dir)/carapace.nu"
 
+# Zellij config file for Windows
+[[- if eq .chezmoi.os "windows" ]]
+$env.ZELLIJ_CONFIG_DIR = $"($env.APPDATA)/Zellij"
+[[- end]]
+
 # Keep at end of file
 if ($"($nu.cache-dir)" | is-empty ) {
 mkdir $"($nu.cache-dir)"
