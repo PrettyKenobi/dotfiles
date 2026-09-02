@@ -49,7 +49,9 @@ if (which ^mise | is-empty ) {
 #do nothing
   return
 } else {
-^mise activate nu | save -f ($nu.data-dir | path join "vendor/autoload/mise.nu")
+let mise_path = $nu.default-config-dir | path join mise.nu
+^mise activate nu | str replace "export-env {" "" | prepend "export-env {" | save $mise_path --force
+#^mise activate nu | save -f ($nu.data-dir | path join "vendor/autoload/mise.nu")
 }
 
 # NOTE: Keep at end of file
