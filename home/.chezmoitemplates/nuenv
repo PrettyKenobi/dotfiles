@@ -7,9 +7,9 @@ mkdir $"($nu.cache-dir)"
 carapace _carapace nushell | save -f $"($nu.cache-dir)/carapace.nu"
 
 # Zellij config file for Windows
-[[- if eq .chezmoi.os "windows" ]]
-$env.ZELLIJ_CONFIG_DIR = $"($env.APPDATA)/Zellij"
-[[- end]]
+if ($env.APPDATA? | is-not-empty ) {
+  $env.ZELLIJ_CONFIG_DIR = $"($env.APPDATA)/Zellij"
+}
 
 # Keep at end of file
 if ($"($nu.cache-dir)" | is-empty ) {
