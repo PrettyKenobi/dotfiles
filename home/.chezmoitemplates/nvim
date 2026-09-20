@@ -230,9 +230,6 @@ do
       if name == "telescope-fzf-native.nvim" then
         if vim.fn.executable("make") == 1 then
           run_build(name, { "make" }, ev.data.path)
-        elseif vim.fn.executable("cmake") == 1 then
-          run_build(name, { 'cmake', '-S.', '-Bbuild', '-DCMAKE_BUILD_TYPE=Release' }, ev.data.path)
-          run_build(name, { 'cmake', '--build', 'build', '--config', 'Release', '--target', 'install'}, ev.data.path)
         end
         return
       end
@@ -248,7 +245,6 @@ do
         if not ev.data.active then
           vim.cmd.packadd("nvim-treesitter")
         end
-        if vim.fn.has("win32") ~= 1 then require("nvim-treesitter").install.compilers = { 'zig' } end
         vim.cmd("TSUpdate")
         return
       end
@@ -428,7 +424,7 @@ do
     gh("nvim-telescope/telescope-ui-select.nvim"),
     gh("benfowler/telescope-luasnip.nvim"),
   }
-  if vim.fn.executable("make") == 1 or vim.fn.executable("cmake") == 1 then
+  if vim.fn.executable("make") == 1 then
     table.insert(telescope_plugins, gh("nvim-telescope/telescope-fzf-native.nvim"))
   end
 

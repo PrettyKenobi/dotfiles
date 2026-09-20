@@ -54,6 +54,16 @@ let mise_path = $nu.default-config-dir | path join mise.nu
 #^mise activate nu | save -f ($nu.data-dir | path join "vendor/autoload/mise.nu")
 }
 
+def --env y [...args] {
+	let tmp = (mktemp -t "yazi-cwd.XXXXXX")
+	^yazi ...$args --cwd-file $tmp
+	let cwd = (open $tmp)
+	if $cwd != $env.PWD and ($cwd | path exists) {
+		cd $cwd
+	}
+	rm -fp $tmp
+}
+
 # NOTE: Keep at end of file
 source ($nu.cache-dir | path join "zoxide.nu")
 # vim: ft=nu
