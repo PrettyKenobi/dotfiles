@@ -1,5 +1,11 @@
 use std/util "path add"
 
+# Seeing if this points treesitter to the newer version of glibc installed by linuxbrew
+[[- if eq .chezmoi.username "prettykenobi" ]]
+$env.LDFLAGS = "-L/home/linuxbrew/.linuxbrew/opt/glibc/lib"
+$env.CPPFLAGS = "-I/home/linuxbrew/.linuxbrew/opt/glibc/include"
+[[-end ]]
+
 path add "~/.local/bin"
 
 $env.CARAPACE_BRIDGES = 'zsh,fish,bash,inshellisense'
