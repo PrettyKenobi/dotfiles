@@ -1057,7 +1057,7 @@ do
     gh("mason-org/mason.nvim"),
     gh("jay-babu/mason-nvim-dap.nvim"),
     gh("leoluz/nvim-dap-go"),
-    -- TODO: Look for plugins for other langauges
+    -- TODO: Look for plugins for other languages
   })
 
   local dap = require("dap")
@@ -1125,6 +1125,7 @@ do
   vim.pack.add({ gh("kevinhwang91/promise-async")})
   vim.pack.add({gh("kevinhwang91/nvim-ufo")})
   require('ufo').setup()
+
 end
 
 
