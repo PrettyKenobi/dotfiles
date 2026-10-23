@@ -1,0 +1,57 @@
+local ls = require("luasnip")
+local fmta = require("luasnip.extras.fmt").fmta
+
+local s = ls.snippet
+local t = ls.text_node
+local i  = ls.insert_node
+local c = ls.choice_node
+local sn = ls.snippet_node
+
+local autosnippet = require("luasnip").extend_decorator.apply(s, {snippetType = "autosnippet"})
+
+
+return {
+        -- Class Docstring
+        s({ trig='cdoc', name='Class Docstring', dscr='dscr'},
+                fmta([[
+"""
+<>
+
+<>
+
+<>
+"""
+               ]],
+                        { i(1,'Description'),
+                        autosnippet({"at", "Attributes",
+fmta([[
+Attributes
+-----------
+<> : <>
+]], { i(1, "name"), i(2,"type"),})
+                                }),
+autosnippet({ "met", "Methods",
+                                fmta([[
+
+                                Methods
+                                -------
+                                <>('<>')
+                                ]],
+                                        { i(1, "name"),
+                                        i(2,"parameters + default")})}),
+                        }
+                )), 
+        -- Method docstring
+        s({ trig='mdoc', name='Method Docstring', },
+                fmta([[
+                """
+Parameters
+----------
+<> : <>
+    <>
+                """"
+                ]],
+                        { i(1,"name"), i(2, "type"), i(3, "description") }
+                    )),
+}
+-- vim: set ft=lua vts=2 :

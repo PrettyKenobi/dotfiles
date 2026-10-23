@@ -751,11 +751,14 @@ do
   -- Use mise for future tooling & LSPs
 
   require("miser").setup({
-    --  auto_lsp = false,
-    --  auto_format = false,
-    --  registry = {
-    --    [tinymist] = { lsp = "tinymist" },
-    --  },
+     auto_lsp = true,
+     auto_format = true,
+    registry = {
+      -- Zubanls for Python
+      ["pipx:zuban"] = {
+        lsp = "zubanls",
+        },
+      },
   })
   -- Automatically install LSPs and related tools to stdpath for Neovim
   require("mason").setup({})
