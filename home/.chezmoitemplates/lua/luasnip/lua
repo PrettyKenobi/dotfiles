@@ -70,4 +70,4 @@ return {
         autosnippet("shide", { t("hidden = true") }),
 }
 
--- vim: set ft=lua tw=2
+-- vim: set ft=lua ts=2 :
