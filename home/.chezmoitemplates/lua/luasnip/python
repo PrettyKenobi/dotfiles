@@ -1,57 +1,44 @@
-local ls = require("luasnip")
-local fmta = require("luasnip.extras.fmt").fmta
+local autosnippet = require'luasnip'.extend_decorator.apply(s, {snippetType = "autosnippet"})
 
-local s = ls.snippet
-local t = ls.text_node
-local i  = ls.insert_node
-local c = ls.choice_node
-local sn = ls.snippet_node
-
-local autosnippet = require("luasnip").extend_decorator.apply(s, {snippetType = "autosnippet"})
-
-
+-- From "Cool Snippets" on LuaSnip Wiki.
+-- Keeps adding arguments via choice nodes
+local function py_init()
+        return
+        sn(nil, c(1, {
+                t(""),
+                sn(1, {
+                        t(", "),
+                        i(1),
+                        d(2, py_init),
+                })
+        }))
+end
+-- Splits comma separated arguments list to return the appropriate text/insert/restore-node
+local function to_init_assign(args)
+        local tab = {}
+        local a = args[1][1]
+        if #(a) == 0 then
+                table.insert(tab, t({"", "\tpass"}))
+        else
+                local cnt = 1
+                for e in string.gmatch(a, " ?([^,]*) ?") do
+                        if #e > 0 then
+                                table.insert(tab, t({"","\tself."}))
+                                -- use restore-node to keep possibly changewd attributes
+                                table.insert(tab, r(cnt, tostring(cnt), i(nil,e)))
+                                table.insert(tab, t(e))
+                        end
+                end
+        end
+        return sn(nil, tab)
+end
 return {
-        -- Class Docstring
-        s({ trig='cdoc', name='Class Docstring', dscr='dscr'},
-                fmta([[
-"""
-<>
 
-<>
-
-<>
-"""
-               ]],
-                        { i(1,'Description'),
-                        autosnippet({"at", "Attributes",
-fmta([[
-Attributes
------------
-<> : <>
-]], { i(1, "name"), i(2,"type"),})
-                                }),
-autosnippet({ "met", "Methods",
-                                fmta([[
-
-                                Methods
-                                -------
-                                <>('<>')
-                                ]],
-                                        { i(1, "name"),
-                                        i(2,"parameters + default")})}),
-                        }
-                )), 
-        -- Method docstring
-        s({ trig='mdoc', name='Method Docstring', },
-                fmta([[
-                """
-Parameters
-----------
-<> : <>
-    <>
-                """"
-                ]],
-                        { i(1,"name"), i(2, "type"), i(3, "description") }
-                    )),
+ s("init", fmt(
+                [[def __init__(self{}):{}]],
+                {
+                        d(1, py_init),
+                        d(2, to_init_assign, {1})
+                }))
 }
 -- vim: set ft=lua vts=2 :

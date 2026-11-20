@@ -751,14 +751,14 @@ do
   -- Use mise for future tooling & LSPs
 
   require("miser").setup({
-     auto_lsp = true,
-     auto_format = true,
+    auto_lsp = true,
+    auto_format = true,
     registry = {
       -- Zubanls for Python
       ["pipx:zuban"] = {
-        lsp = "zubanls",
-        },
+        lsp = "zuban",
       },
+    },
   })
   -- Automatically install LSPs and related tools to stdpath for Neovim
   require("mason").setup({})
@@ -844,7 +844,7 @@ do
   local snippet_path = vim.fn.stdpath("config") .. "/lua/luasnip"
   require("luasnip.loaders.from_lua").lazy_load({ paths = { snippet_path } })
 
-  ls.config.set_config({
+  ls.config.setup({
     history = true,
     updateevents = "TextChanged,TextChangedI",
     enable_autosnippets = true,
@@ -871,22 +871,17 @@ do
     end
   end, { silent = true })
   vim.keymap.set({ "i", "s" }, "<S-Tab>", function()
-    ls.jump(-1)
+    if ls.jumpable(-1) then
+      ls.jump(-1)
+    end
   end, { silent = true })
   vim.keymap.set("s", "<Tab>", function()
     ls.jump(1)
   end, { silent = true })
-  --   vim.keymap.set({ "i", "s" }, "<C-k>", function ()
-  --    if ls.expand_or_jumpable() then ls.expand_or_jump()
-  --   end
-  -- end, {silent = true})
-  -- vim.keymap.set({ "i", "s" }, "<C-j>", function()
-  --   if ls.jumpable(-1) then ls.jump(-1) end
-  --   end, {silent = true })
-  --
-  --   vim.keymap.set("i", "<C-l>", function()
-  --     if ls.choice_active() then ls.change_choice(1) end
-  --   end)
+
+  vim.keymap.set("i", "<C-l>", function()
+    if ls.choice_active() then ls.change_choice(1) end
+  end, { silent = true })
 
   -- Source luasnips file to reload snippets
   -- Because I use chezmoi, that file is different from a typical setup
