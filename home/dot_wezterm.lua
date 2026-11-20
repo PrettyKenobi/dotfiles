@@ -40,15 +40,12 @@ tabline.setup({
 	options = {
 		theme = config.color_scheme,
 	},
+	sections = {
+		tabline_a = { 'mode' },
+		tabline_b = { 'workspace' },
+		tabline_z = { 'datetime' },
+	},
 })
 tabline.apply_to_config(config)
-
--- Define workspaces as separate lua files
--- Files live in <wezterm.config_dir>/workspaces
-local wsinit = wezterm.plugin.require("https://github.com/JuanraCM/wsinit.wezterm")
--- default keybind uses leader
-config.leader = { key = "/", mods = "CTRL", timeout_milliseconds = 1000 }
-wsinit.setup()
-wsinit.apply_to_config(config)
 
 return config
