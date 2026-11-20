@@ -30,7 +30,6 @@ for idx, dom in ipairs(wsl_domains) do
 end
 config.wsl_domains = wsl_domains
 
-config.use_fancy_tab_bar = false
 config.check_for_updates = true
 
 -- Themeing for tabline.
@@ -38,12 +37,10 @@ config.check_for_updates = true
 local tabline = wezterm.plugin.require("https://github.com/michaelbrusegard/tabline.wez")
 tabline.setup({
 	options = {
-		theme = config.color_scheme,
+		theme = "rose-pine-dawn",
 	},
 	sections = {
-		tabline_a = { 'mode' },
-		tabline_b = { 'workspace' },
-		tabline_z = { 'datetime' },
+		tabline_x = { ' ' },	
 	},
 })
 tabline.apply_to_config(config)
