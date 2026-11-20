@@ -1,5 +1,12 @@
 use std/util "path add"
 
+# Seeing if this points treesitter to the newer version of glibc installed by 
+# linuxbrew on WSL
+[[- if eq .chezmoi.username "prettykenobi" ]]
+$env.LDFLAGS = "-L/home/linuxbrew/.linuxbrew/opt/glibc/lib"
+$env.CPPFLAGS = "-I/home/linuxbrew/.linuxbrew/opt/glibc/include"
+[[-end ]]
+
 path add "~/.local/bin"
 
 $env.CARAPACE_BRIDGES = 'zsh,fish,bash,inshellisense'
@@ -7,9 +14,9 @@ mkdir $"($nu.cache-dir)"
 carapace _carapace nushell | save -f $"($nu.cache-dir)/carapace.nu"
 
 # Zellij config file for Windows
-[[- if eq .chezmoi.os "windows" ]]
-$env.ZELLIJ_CONFIG_DIR = $"($env.APPDATA)/Zellij"
-[[- end]]
+if ($env.APPDATA? | is-not-empty ) {
+  $env.ZELLIJ_CONFIG_DIR = $"($env.APPDATA)/Zellij"
+}
 
 # Keep at end of file
 if ($"($nu.cache-dir)" | is-empty ) {
